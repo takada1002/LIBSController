@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIBSController", "LIBSController\LIBSController.csproj", "{FF9BF817-7D45-4927-968C-73D45F798F50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelsecInverterLib", "..\MelsecInverterLib\MelsecInverterLib\MelsecInverterLib.csproj", "{42F41FDA-C3B9-4308-9657-9143348BD972}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcpLibrary", "..\TcpLibrary\TcpLibrary\TcpLibrary.csproj", "{D0FBDE67-3737-47A5-BF15-CB0D5ABE0F4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFCPENC", "..\IFCPENC\IFCPENC.csproj", "{84B3A8B4-DA95-4441-A0FC-B44C59732DC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CounterBoardLib", "..\CounterBoardLib\CounterBoardLib\CounterBoardLib.csproj", "{AC1731AB-8C46-4C96-B7F8-18DB5B3A45F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CounterBoardDebug", "CounterBoardDebug\CounterBoardDebug.csproj", "{50312F82-B317-4D7D-BDC7-B5EEA8C0FDC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIBSEmulator", "LIBSEmulator\LIBSEmulator.csproj", "{72C9DAF0-8C77-4A42-85EA-1E52F1F3D3FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF9BF817-7D45-4927-968C-73D45F798F50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF9BF817-7D45-4927-968C-73D45F798F50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF9BF817-7D45-4927-968C-73D45F798F50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF9BF817-7D45-4927-968C-73D45F798F50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42F41FDA-C3B9-4308-9657-9143348BD972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42F41FDA-C3B9-4308-9657-9143348BD972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42F41FDA-C3B9-4308-9657-9143348BD972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42F41FDA-C3B9-4308-9657-9143348BD972}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0FBDE67-3737-47A5-BF15-CB0D5ABE0F4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0FBDE67-3737-47A5-BF15-CB0D5ABE0F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0FBDE67-3737-47A5-BF15-CB0D5ABE0F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0FBDE67-3737-47A5-BF15-CB0D5ABE0F4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84B3A8B4-DA95-4441-A0FC-B44C59732DC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84B3A8B4-DA95-4441-A0FC-B44C59732DC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84B3A8B4-DA95-4441-A0FC-B44C59732DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84B3A8B4-DA95-4441-A0FC-B44C59732DC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC1731AB-8C46-4C96-B7F8-18DB5B3A45F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC1731AB-8C46-4C96-B7F8-18DB5B3A45F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC1731AB-8C46-4C96-B7F8-18DB5B3A45F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC1731AB-8C46-4C96-B7F8-18DB5B3A45F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50312F82-B317-4D7D-BDC7-B5EEA8C0FDC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50312F82-B317-4D7D-BDC7-B5EEA8C0FDC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50312F82-B317-4D7D-BDC7-B5EEA8C0FDC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50312F82-B317-4D7D-BDC7-B5EEA8C0FDC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72C9DAF0-8C77-4A42-85EA-1E52F1F3D3FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72C9DAF0-8C77-4A42-85EA-1E52F1F3D3FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72C9DAF0-8C77-4A42-85EA-1E52F1F3D3FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72C9DAF0-8C77-4A42-85EA-1E52F1F3D3FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F887161B-CC19-41CC-B372-A0837113289D}
+	EndGlobalSection
+EndGlobal
