@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FF9BF817-7D45-4927-968C-73D45F798F50}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LIBSController</RootNamespace>
+    <AssemblyName>LIBSController</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AirNozzleSettingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AirNozzleSettingForm.Designer.cs">
+      <DependentUpon>AirNozzleSettingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationLog.cs" />
+    <Compile Include="ConfirmForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfirmForm.Designer.cs">
+      <DependentUpon>ConfirmForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ControlForm.Designer.cs">
+      <DependentUpon>ControlForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConveyorDebugView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConveyorDebugView.Designer.cs">
+      <DependentUpon>ConveyorDebugView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConveyorManager.cs" />
+    <Compile Include="NozzleSettings.cs" />
+    <Compile Include="SignalManager.cs" />
+    <Compile Include="SystemSwitchManager.cs" />
+    <Compile Include="ConveyorSettings.cs" />
+    <Compile Include="DebugView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DebugView.Designer.cs">
+      <DependentUpon>DebugView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EmergencyStopButtonManager.cs" />
+    <Compile Include="KeySwitchManager.cs" />
+    <Compile Include="LaserSwitchManager.cs" />
+    <Compile Include="LEDManager.cs" />
+    <Compile Include="LIBSManager.cs" />
+    <Compile Include="LIBSSorter.cs" />
+    <Compile Include="MaterialQueue.cs" />
+    <Compile Include="MaterialSelectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MaterialSelectForm.Designer.cs">
+      <DependentUpon>MaterialSelectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PaddleManager.cs" />
+    <Compile Include="MaterialSetting.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="StatusLabel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StatusLabel.Designer.cs">
+      <DependentUpon>StatusLabel.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AirNozzleSettingForm.resx">
+      <DependentUpon>AirNozzleSettingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfirmForm.resx">
+      <DependentUpon>ConfirmForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlForm.resx">
+      <DependentUpon>ControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConveyorDebugView.resx">
+      <DependentUpon>ConveyorDebugView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DebugView.resx">
+      <DependentUpon>DebugView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MaterialSelectForm.resx">
+      <DependentUpon>MaterialSelectForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusLabel.resx">
+      <DependentUpon>StatusLabel.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CounterBoardLib\CounterBoardLib\CounterBoardLib.csproj">
+      <Project>{ac1731ab-8c46-4c96-b7f8-18db5b3a45f9}</Project>
+      <Name>CounterBoardLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MelsecInverterLib\MelsecInverterLib\MelsecInverterLib.csproj">
+      <Project>{42f41fda-c3b9-4308-9657-9143348bd972}</Project>
+      <Name>MelsecInverterLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TcpLibrary\TcpLibrary\TcpLibrary.csproj">
+      <Project>{d0fbde67-3737-47a5-bf15-cb0d5abe0f4a}</Project>
+      <Name>TcpLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="arrow.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
