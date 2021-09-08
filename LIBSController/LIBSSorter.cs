@@ -151,7 +151,7 @@ namespace LIBSController
 		private SignalManager signalManager = null;
 
 		// 素材管理キュー
-		private List<MaterialQueue> materialQueue = null;
+		private List<DrivingQueue> drivingQueue = null;
 
 		// カウンターボード
 		private List<CounterBoard> counterBoard = null;
@@ -418,8 +418,8 @@ namespace LIBSController
                 
                 // カウンタボード
                 this.counterBoard = CounterBoard.Instance;
-                // 素材管理キュー
-                this.materialQueue = MaterialQueue.Instance;
+                // 運転管理キュー
+                this.drivingQueue = DrivingQueue.Instance;
 
                 // 運転開始イベントをセット
                 this.keySwitchMgr.systemStarted += OnSystemStarted;
@@ -808,14 +808,25 @@ namespace LIBSController
 							else
 								this.counterBoard[1].getCounter(nozzleNumber - 4, out counter);
 
-							MaterialData materialData = new MaterialData(counter, e.Counter, (int)e.Group);
-							materialData.IsDriving = true;
-							materialData.IsSet = true;
-
 							//this.appLog.Debug($"データキュー登録 駆動エアノズル番号：{materialData.nozzleNumber} 現在カウント：{counter} 駆動カウント：{materialData.DrivingCounter}");
 
 							// データキューが管理値の最大を越えている
-							if (!this.materialQueue[materialData.nozzleNumber - 1].enqueue(materialData))
+							if (!this.drivingQueue[nozzleNumber - 1].Enqueue(new DrivingData(counter, e.Counter , nozzleNumber)))
+							{
+								this.printedMessage("管理可能な素材データの最大値を越えています。");
+							}
+						}
+
+						int nozzleNumber2 = materialSetting.getNozzleNumber2((int)e.Group);
+						if (nozzleNumber2 > 0)
+						{
+							if ( nozzleNumber2 <= 4 )
+								this.counterBoard[0].getCounter(nozzleNumber2, out counter);
+							else
+								this.counterBoard[1].getCounter(nozzleNumber2 - 4, out counter);
+
+							// データキューが管理値の最大を越えている
+							if (!this.drivingQueue[nozzleNumber2 - 1].Enqueue(new DrivingData(counter, e.Counter, nozzleNumber2)))
 							{
 								this.printedMessage("管理可能な素材データの最大値を越えています。");
 							}
@@ -1396,7 +1407,7 @@ namespace LIBSController
 				}
 
 				// 保持素材データの破棄
-				this.materialQueue.ForEach(q=>q.clearMaterialData());
+				this.drivingQueue.ForEach(q=>q.ClearMaterialData());
 
 
 				if(Settings.Default.CounterBoardDebug)

@@ -2,9 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CounterBoardDebug.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="COMPort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">COM1</Value>
-    </Setting>
     <Setting Name="BaudRate" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">19200</Value>
     </Setting>
@@ -22,6 +19,9 @@
     </Setting>
     <Setting Name="LIBSPort" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2000</Value>
+    </Setting>
+    <Setting Name="COMPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">COM3</Value>
     </Setting>
   </Settings>
 </SettingsFile>

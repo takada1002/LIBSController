@@ -86,7 +86,7 @@
     <Compile Include="LEDManager.cs" />
     <Compile Include="LIBSManager.cs" />
     <Compile Include="LIBSSorter.cs" />
-    <Compile Include="MaterialQueue.cs" />
+    <Compile Include="DrivingQueue.cs" />
     <Compile Include="MaterialSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>

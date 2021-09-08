@@ -51,10 +51,10 @@
       <Value Profile="(Default)">COM3</Value>
     </Setting>
     <Setting Name="AirNozzleDebug" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ConveyorDebug" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="LibsDebug" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
@@ -63,7 +63,7 @@
       <Value Profile="(Default)">1000</Value>
     </Setting>
     <Setting Name="CounterBoardDebug" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="LIBSReadyTimeout" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">5000</Value>

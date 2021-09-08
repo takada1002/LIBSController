@@ -19,7 +19,9 @@ namespace LIBSController
     {
 		#region 定数
 
-		const int NOZZLE_MAX = 5;
+		const int NOZZLE_MAX = 3;
+
+		const int TIMING_MAX = 10000000;
 
 		#endregion
 
@@ -48,6 +50,18 @@ namespace LIBSController
 		// タイミング変更前の値
 		//UInt32 beforeTiming = 0;
 		List<UInt32> beforeTiming = new List<uint>();
+
+		// タイミング変更(減)長押しタイマー
+		System.Windows.Forms.Timer timingBackTimer = null;
+
+		// タイミング変更(減　大)長押しタイマー
+		System.Windows.Forms.Timer timingLargeBackTimer = null;
+
+		// タイミング変更(増)長押しタイマー
+		System.Windows.Forms.Timer timingNextTimer = null;
+
+		// タイミング変更(増　大)長押しタイマー
+		System.Windows.Forms.Timer timingLargeNextTimer = null;
 
 #if DEBUG
         DebugView debugView = new DebugView();
@@ -110,6 +124,12 @@ namespace LIBSController
 
             this.appLog.Info("<----LIBS制御ソフトウェア起動---->");
 
+			// バージョンの表示
+			var info = FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string[] fver = info.FileVersion.Split(new char[] { '.' });
+            labelVersion.Text = $"Version {fver[0]}.{fver[1]}.{fver[2]}";
+
+
             // LIBS ソータの初期化
             initialize();
         }
@@ -125,7 +145,11 @@ namespace LIBSController
 
             // コンボボックスとタイミング調整を変更不可に
             this.comboBoxConveyorSpeed.Enabled = false;
-            this.numericUpDownPaddleTiming.Enabled = false;
+			this.textBoxPaddleTiming.Enabled = false;
+			this.buttonTimingBack.Enabled = false;
+			this.buttonTimingLargeBack.Enabled = false;
+			this.buttonTimingNext.Enabled = false;
+			this.buttonTimingLargeNext.Enabled = false;
 			this.labelNozzleNumber.Enabled = false;
 			this.buttonNozzleBack.Enabled = false;
 			this.buttonNozzleNext.Enabled = false;
@@ -143,7 +167,7 @@ namespace LIBSController
 			this.comboBoxConveyorSpeed.SelectedItem = conveyorItem;
 
 			// タイミング表示
-			this.numericUpDownPaddleTiming.Value = ConveyorSettings.GetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text));
+			this.textBoxPaddleTiming.Text = ConveyorSettings.GetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text)).ToString();
 
 			// ノズル番号表示
 			this.labelNozzleNumber.Text = "1";
@@ -190,6 +214,22 @@ namespace LIBSController
 			this.viewUpdateTimer.Interval = 50;
 			this.viewUpdateTimer.Tick += ViewUpdateTimer_Tick;
 			this.viewUpdateTimer.Start();
+
+			this.timingBackTimer = new System.Windows.Forms.Timer();
+			this.timingBackTimer.Interval = 100;
+			this.timingBackTimer.Tick += TimingBackTimer_Tick;
+
+			this.timingLargeBackTimer = new System.Windows.Forms.Timer();
+			this.timingLargeBackTimer.Interval = 100;
+			this.timingLargeBackTimer.Tick += TimingLargeBackTimer_Tick;
+
+			this.timingNextTimer = new System.Windows.Forms.Timer();
+			this.timingNextTimer.Interval = 100;
+			this.timingNextTimer.Tick += TimingNextTimer_Tick;
+
+			this.timingLargeNextTimer = new System.Windows.Forms.Timer();
+			this.timingLargeNextTimer.Interval = 100;
+			this.timingLargeNextTimer.Tick += TimingLargeNextTimer_Tick;
 
 #if DEBUG
 			//appLog.LogWrited = (level, log) => { debugView.WriteStrLine(log); };
@@ -523,10 +563,13 @@ namespace LIBSController
             if (!this.isChangingT)
             {
                 // 現在の設定値を取得
-                //this.beforeTiming = (UInt32)this.numericUpDownPaddleTiming.Value;
 				this.beforeTiming = ConveyorSettings.GetNozzleTiming();
                 // 有効化
-                this.numericUpDownPaddleTiming.Enabled = true;
+				this.textBoxPaddleTiming.Enabled = true;
+				this.buttonTimingBack.Enabled = true;
+				this.buttonTimingLargeBack.Enabled = true;
+				this.buttonTimingNext.Enabled = true;
+				this.buttonTimingLargeNext.Enabled = true;
 				this.labelNozzleNumber.Enabled = true;
 				this.buttonNozzleBack.Enabled = true;
 				this.buttonNozzleNext.Enabled = true;
@@ -543,7 +586,11 @@ namespace LIBSController
                 this.changeTimerT.Stop();
 
                 // 無効化
-                this.numericUpDownPaddleTiming.Enabled = false;
+				this.textBoxPaddleTiming.Enabled = false;
+				this.buttonTimingBack.Enabled = false;
+				this.buttonTimingLargeBack.Enabled = false;
+				this.buttonTimingNext.Enabled = false;
+				this.buttonTimingLargeNext.Enabled = false;
 				this.labelNozzleNumber.Enabled = false;
 				this.buttonNozzleBack.Enabled = false;
 				this.buttonNozzleNext.Enabled = false;
@@ -572,7 +619,11 @@ namespace LIBSController
                 this.changeTimerT.Stop();
 
                 // 無効化
-                this.numericUpDownPaddleTiming.Enabled = false;
+				this.textBoxPaddleTiming.Enabled = false;
+				this.buttonTimingBack.Enabled = false;
+				this.buttonTimingLargeBack.Enabled = false;
+				this.buttonTimingNext.Enabled = false;
+				this.buttonTimingLargeNext.Enabled = false;
 				this.labelNozzleNumber.Enabled = false;
 				this.buttonNozzleBack.Enabled = false;
 				this.buttonNozzleNext.Enabled = false;
@@ -581,10 +632,9 @@ namespace LIBSController
                 // ボタンの色変更 (白)
                 this.buttonChangePaddleTiming.BackColor = Color.White;
                 // 設定値を元の値に戻す
-                //this.numericUpDownPaddleTiming.Value = Settings.Default.PaddleDriveTiming;
 				ConveyorSettings.SetNozzleTiming(beforeTiming);
 				ConveyorSettings.Serialize();
-				this.numericUpDownPaddleTiming.Value = ConveyorSettings.GetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text));
+				this.textBoxPaddleTiming.Text = ConveyorSettings.GetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text)).ToString();
 			}
         }
 
@@ -712,18 +762,6 @@ namespace LIBSController
 			}
 		}
 
-		// パドル動作タイミング変更イベント
-		private void OnValueChangedPaddleTiming(object sender, EventArgs e)
-		{
-			// 有効状態なら値変更中はタイマーをリセット
-			if (this.numericUpDownPaddleTiming.Enabled)
-			{
-				ConveyorSettings.SetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text), Convert.ToUInt32(this.numericUpDownPaddleTiming.Value));
-				this.changeTimerT.Stop();
-				this.changeTimerT.Start();
-			}
-		}
-
 		// ノズル番号変化イベント
 		private void labelNozzleNumber_TextChanged(object sender, EventArgs e)
 		{
@@ -733,7 +771,21 @@ namespace LIBSController
 				this.changeTimerT.Start();
 			}
 
-			this.numericUpDownPaddleTiming.Value = ConveyorSettings.GetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text));
+			this.textBoxPaddleTiming.Text = ConveyorSettings.GetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text)).ToString();
+		}
+
+		// パドルタイミング変化イベント
+		private void textBoxPaddleTiming_TextChanged(object sender, EventArgs e)
+		{
+			if(!int.TryParse(this.textBoxPaddleTiming.Text,out var num))
+				this.textBoxPaddleTiming.Text = ConveyorSettings.GetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text)).ToString();
+
+			if (this.textBoxPaddleTiming.Enabled)
+			{
+				ConveyorSettings.SetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text), Convert.ToUInt32(this.textBoxPaddleTiming.Text));
+				this.changeTimerT.Stop();
+				this.changeTimerT.Start();
+			}
 		}
 
 		// ノズル番号 前 クリックイベント
@@ -753,6 +805,134 @@ namespace LIBSController
 			if (num < NOZZLE_MAX)
 			{
 				labelNozzleNumber.Text = (num + 1).ToString();
+			}
+		}
+
+		// タイミング 減 マウスダウンイベント
+		private void buttonTimingBack_MouseDown(object sender, MouseEventArgs e)
+		{
+			int num = Convert.ToInt32(textBoxPaddleTiming.Text);
+			if (num > 1)
+			{
+				textBoxPaddleTiming.Text = (num - 1).ToString();
+			}
+			timingBackTimer.Start();
+		}
+
+		// タイミング　減　大　マウスダウンイベント
+		private void buttonTimingLargeBack_MouseDown(object sender, MouseEventArgs e)
+		{
+			int num = Convert.ToInt32(textBoxPaddleTiming.Text);
+			if (num > 100)
+			{
+				textBoxPaddleTiming.Text = (num - 100).ToString();
+			}
+			else
+			{
+				textBoxPaddleTiming.Text = 0.ToString();
+			}
+			timingLargeBackTimer.Start();
+		}
+
+		// タイミング 増 マウスダウンイベント
+		private void buttonTimingNext_MouseDown(object sender, MouseEventArgs e)
+		{
+			int num = Convert.ToInt32(textBoxPaddleTiming.Text);
+			if (num < TIMING_MAX)
+			{
+				textBoxPaddleTiming.Text = (num + 1).ToString();
+			}
+			timingNextTimer.Start();
+		}
+
+		// タイミング 増 マウスダウンイベント
+		private void buttonTimingLargeNext_MouseDown(object sender, MouseEventArgs e)
+		{
+			int num = Convert.ToInt32(textBoxPaddleTiming.Text);
+			if (num + 100 < TIMING_MAX)
+			{
+				textBoxPaddleTiming.Text = (num + 100).ToString();
+			}
+			else
+			{
+				textBoxPaddleTiming.Text = TIMING_MAX.ToString();
+			}
+			timingLargeNextTimer.Start();
+		}
+
+		// タイミング 減 マウスアップイベント
+		private void buttonTimingBack_MouseUp(object sender, MouseEventArgs e)
+		{
+			timingBackTimer.Stop();
+		}
+
+		// タイミング　減　大　マウスアップイベント
+		private void buttonTimingLargeBack_MouseUp(object sender, MouseEventArgs e)
+		{
+			timingLargeBackTimer.Stop();
+		}
+
+		// タイミング 増 マウスアップイベント
+		private void buttonTimingNext_MouseUp(object sender, MouseEventArgs e)
+		{
+			timingNextTimer.Stop();
+		}
+
+		// タイミング　増　大　マウスアップイベント
+		private void buttonTimingLargeNext_MouseUp(object sender, MouseEventArgs e)
+		{
+			timingLargeNextTimer.Stop();
+		}
+
+		// タイミング　減　長押しイベント
+		private void TimingBackTimer_Tick(object sender, EventArgs e)
+		{
+			int num = Convert.ToInt32(textBoxPaddleTiming.Text); 
+
+			if (num > 1)
+			{
+				textBoxPaddleTiming.Text = (num - 1).ToString();
+			}
+		}
+
+		// タイミング　減　大　長押しイベント
+		private void TimingLargeBackTimer_Tick(object sender, EventArgs e)
+		{
+			int num = Convert.ToInt32(textBoxPaddleTiming.Text); 
+
+			if (num > 100)
+			{
+				textBoxPaddleTiming.Text = (num - 100).ToString();
+			}
+			else
+			{
+				textBoxPaddleTiming.Text = 0.ToString();
+			}
+		}
+
+		// タイミング　増　長押しイベント
+		private void TimingNextTimer_Tick(object sender, EventArgs e)
+		{
+			int num = Convert.ToInt32(textBoxPaddleTiming.Text);
+
+			if (num < TIMING_MAX)
+			{
+				textBoxPaddleTiming.Text = (num + 1).ToString();
+			}
+		}
+
+		// タイミング　増　大　長押しイベント
+		private void TimingLargeNextTimer_Tick(object sender, EventArgs e)
+		{
+			int num = Convert.ToInt32(textBoxPaddleTiming.Text);
+
+			if (num + 100 < TIMING_MAX)
+			{
+				textBoxPaddleTiming.Text = (num + 100).ToString();
+			}
+			else
+			{
+				textBoxPaddleTiming.Text = TIMING_MAX.ToString();
 			}
 		}
 
@@ -1018,8 +1198,7 @@ namespace LIBSController
             this.statusLabel.BackColor = backColor;
         }
 
+
 		#endregion
-
-
 	}
 }

@@ -16,7 +16,7 @@ namespace LIBSController
 
 		private int topIndex = 0;
 
-		const int NOZZLE_MAX = 5;
+		const int NOZZLE_MAX = 3;
 
 		public class RowData
 		{
@@ -24,17 +24,20 @@ namespace LIBSController
 			public Label No;
 			public Label Name;
 			public Label Nozzle;
+			public Label Nozzle2;
 			public void Update()
 			{
 				if(Class != null)
 				{
 					Name.Text = Class.className;
 					Nozzle.Text = Class.nozzleNumber == 0 ? "無" : Class.nozzleNumber.ToString();
+					Nozzle2.Text = Class.nozzleNumber2 == 0 ? "無" : Class.nozzleNumber2.ToString();
 				}
 				else
 				{
 					Name.Text = string.Empty;
 					Nozzle.Text = string.Empty;
+					Nozzle2.Text = string.Empty;
 				}
 			}
 		}
@@ -53,14 +56,14 @@ namespace LIBSController
         // 表示の初期化
         private void initializeControl()
         {
-			Rows.Add(new RowData() { No = this.labelNo1, Name = this.labelName1, Nozzle = this.labelNozzle1 });
-			Rows.Add(new RowData() { No = this.labelNo2, Name = this.labelName2, Nozzle = this.labelNozzle2 });
-			Rows.Add(new RowData() { No = this.labelNo3, Name = this.labelName3, Nozzle = this.labelNozzle3 });
-			Rows.Add(new RowData() { No = this.labelNo4, Name = this.labelName4, Nozzle = this.labelNozzle4 });
-			Rows.Add(new RowData() { No = this.labelNo5, Name = this.labelName5, Nozzle = this.labelNozzle5 });
-			Rows.Add(new RowData() { No = this.labelNo6, Name = this.labelName6, Nozzle = this.labelNozzle6 });
-			Rows.Add(new RowData() { No = this.labelNo7, Name = this.labelName7, Nozzle = this.labelNozzle7 });
-			Rows.Add(new RowData() { No = this.labelNo8, Name = this.labelName8, Nozzle = this.labelNozzle8 });
+			Rows.Add(new RowData() { No = this.labelNo1, Name = this.labelName1, Nozzle = this.labelNozzle1, Nozzle2 = this.labelNozzle1_2 });
+			Rows.Add(new RowData() { No = this.labelNo2, Name = this.labelName2, Nozzle = this.labelNozzle2, Nozzle2 = this.labelNozzle2_2 });
+			Rows.Add(new RowData() { No = this.labelNo3, Name = this.labelName3, Nozzle = this.labelNozzle3, Nozzle2 = this.labelNozzle3_2 });
+			Rows.Add(new RowData() { No = this.labelNo4, Name = this.labelName4, Nozzle = this.labelNozzle4, Nozzle2 = this.labelNozzle4_2 });
+			Rows.Add(new RowData() { No = this.labelNo5, Name = this.labelName5, Nozzle = this.labelNozzle5, Nozzle2 = this.labelNozzle5_2 });
+			Rows.Add(new RowData() { No = this.labelNo6, Name = this.labelName6, Nozzle = this.labelNozzle6, Nozzle2 = this.labelNozzle6_2 });
+			Rows.Add(new RowData() { No = this.labelNo7, Name = this.labelName7, Nozzle = this.labelNozzle7, Nozzle2 = this.labelNozzle7_2 });
+			Rows.Add(new RowData() { No = this.labelNo8, Name = this.labelName8, Nozzle = this.labelNozzle8, Nozzle2 = this.labelNozzle8_2 });
 
 			updatePage();
 		}
@@ -125,6 +128,36 @@ namespace LIBSController
 				if(row.Class.nozzleNumber < NOZZLE_MAX)
 				{
 					row.Class.nozzleNumber++;
+					row.Update();
+				}
+			}
+		}
+
+		private void buttonNozzleBack_2_Click(object sender, EventArgs e)
+		{
+			Button button = (Button)sender;
+			int rowIndex = Convert.ToInt32(button.Tag) - 1;
+			var row = Rows[rowIndex];
+			if (row.Class != null)
+			{
+				if(row.Class.nozzleNumber2 > 0)
+				{
+					row.Class.nozzleNumber2--;
+					row.Update();
+				}
+			}
+		}
+
+		private void buttonNozzleNext_2_Click(object sender, EventArgs e)
+		{
+			Button button = (Button)sender;
+			int rowIndex = Convert.ToInt32(button.Tag) - 1;
+			var row = Rows[rowIndex];
+			if (row.Class != null)
+			{
+				if(row.Class.nozzleNumber2 < NOZZLE_MAX)
+				{
+					row.Class.nozzleNumber2++;
 					row.Update();
 				}
 			}

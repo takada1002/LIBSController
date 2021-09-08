@@ -67,6 +67,20 @@ namespace LIBSController
                     Instance = (MaterialSetting)serializer.Deserialize(reader);
                 }
                 Instance.errorFlag = false;
+
+#if DEBUG
+                Instance.materialClassList = new List<MaterialClass>()
+				{
+                    new MaterialClass(){ classCode = 1 , className = "Cu base" },
+                    new MaterialClass(){ classCode = 1 , className = "Cu-Zn base" },
+                    new MaterialClass(){ classCode = 1 , className = "Zn base" },
+                    new MaterialClass(){ classCode = 1 , className = "Fe-Cr-Ni base" },
+                    new MaterialClass(){ classCode = 1 , className = "Al base" },
+                    new MaterialClass(){ classCode = 1 , className = "Cr-Ni-coating" },
+                    new MaterialClass(){ classCode = 1 , className = "Fe base" },
+                    new MaterialClass(){ classCode = 1 , className = "Fe-Cr base" },
+				};
+#endif
             }
             catch (Exception)
             {
@@ -95,6 +109,23 @@ namespace LIBSController
 			}
 
 			return nozzleNumber;
+		}
+
+        public int getNozzleNumber2(int classCode)
+		{
+			int nozzleNumber2 = 0;
+
+			try
+			{
+				nozzleNumber2 = this.materialClassList[classCode].nozzleNumber2;
+			}
+			catch
+			{
+				// 非選別対象とする。
+				nozzleNumber2 = 0;
+			}
+
+			return nozzleNumber2;
 		}
 
         public String getClassName(int classCode)
@@ -134,5 +165,7 @@ namespace LIBSController
 		// エアノズル番号
 		[System.Xml.Serialization.XmlElement("NozzleNumber")]
 		public int nozzleNumber { get; set; }
+        [System.Xml.Serialization.XmlElement("NozzleNumber2")]
+		public int nozzleNumber2 { get; set; }
 	}
 }

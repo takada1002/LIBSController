@@ -100,11 +100,10 @@ namespace LIBSController
         // アプリケーションログ
         private ApplicationLog appLog = null;
         // 素材管理キュー
-        //private MaterialQueue materialQueue = null;
-		private List<MaterialQueue> materialQueue = null;
+		private List<DrivingQueue> drivingQueue = null;
 		// 素材管理データ
 		//private MaterialData materialData = null;
-		private List<MaterialData> materialData = new List<MaterialData>() { null,null,null,null,null,null };
+		private List<DrivingData> drivingData = new List<DrivingData>() { null,null,null,null,null,null };
 		// カウンタボード
 		private List<CounterBoard> counterBoard = null;
 
@@ -129,7 +128,7 @@ namespace LIBSController
             // カウンタボードのインスタンスを取得
             this.counterBoard = CounterBoard.Instance;
             // 素材管理キューのインスタンスを取得
-            this.materialQueue = MaterialQueue.Instance;
+            this.drivingQueue = DrivingQueue.Instance;
 
             this.counterBoard[0].channel1Interrupted += OnChannel1Interrupted;
             this.counterBoard[0].channel2Interrupted += OnChannel2Interrupted;
@@ -180,35 +179,17 @@ namespace LIBSController
 					{
 						for(int i = 0 ; i < 6 ; i++)
 						{
-							var queue = this.materialQueue[i];
+							var queue = this.drivingQueue[i];
 
 							try
 							{
-								//// 計測 PC とMopaLIBS データの整合性をカウンタ値でチェック
-								//if (queue.Count > 0)
-								//{
-								//	if(i<4)
-								//		this.counterBoard[0].getCounter(i + 1, out counter);
-								//	else
-								//		this.counterBoard[1].getCounter(i - 3, out counter);
-
-								//	MaterialData firstData = queue.getFirst();
-								//	if (firstData.DrivingCounter < counter)
-								//	{
-								//		// 先頭データを削除する。
-								//		//MaterialData removeData = this.materialQueue.dequeue();
-								//		//this.appLog.Info(string.Format("カウント値不整合で先頭データを削除 {0} - {1}", removeData.DrivingCounter, counter));
-								//		throw new ApplicationException("カウント値不整合");
-								//	}
-								//}
-
 								// データキューにデータが積まれておりパドル駆動がセットされていることが条件
-								if (queue.Count > 0 && queue.checkPaddleDrivingSetData())
+								if (queue.Count > 0 && queue.CheckPaddleDrivingSetData())
 								{
 									// パドル駆動データがからの場合
-									if (this.materialData[i] == null)
+									if (this.drivingData[i] == null)
 									{
-										this.materialData[i] = queue.dequeue();
+										this.drivingData[i] = queue.Dequeue();
 
 										if(i < 4)
 											this.counterBoard[0].getCounter(i + 1, out counter);
@@ -217,7 +198,7 @@ namespace LIBSController
 
 										// ここで現在のカウント値を超えていないかチェックする。
 										// 10は処理速度の下駄を履かせている
-										var drivingCount = this.materialData[i].DrivingCounter;
+										var drivingCount = this.drivingData[i].DrivingCounter;
 										if (drivingCount > counter + 10)
 										{
 											// パドル駆動タイミングをセット
@@ -226,7 +207,7 @@ namespace LIBSController
 										}
 										else
 										{
-											this.materialData[i] = null;
+											this.drivingData[i] = null;
 											this.appLog.Info(string.Format("カウンタ値追い越しでパドル駆動をスキップします。駆動カウント:{0} 現在カウント {1}", drivingCount, counter));
 										}
 									}
@@ -235,8 +216,8 @@ namespace LIBSController
 							catch
 							{
 								// 管理データを初期化する
-								queue.clearMaterialData();
-								this.materialData[i] = null;
+								queue.ClearMaterialData();
+								this.drivingData[i] = null;
 							}
 						}
 					}
@@ -260,8 +241,8 @@ namespace LIBSController
 		{
 			for(int i = 0 ; i < 6 ; i++)
 			{
-				this.materialData[i] = null;
-				this.materialQueue[i].clearMaterialData();
+				this.drivingData[i] = null;
+				this.drivingQueue[i].ClearMaterialData();
 			}
 		}
 
@@ -376,42 +357,39 @@ namespace LIBSController
             //lock (lockObj)
 			lock(lockObjNozzle[channel-1])
             {
-                if (this.materialData[channel-1] != null)
+                if (this.drivingData[channel-1] != null)
                 {
-                    if (this.materialData[channel - 1].IsDriving)
-                    {
-						try
-						{ 
-							double materialMillimater = materialData[channel - 1].lengthX / 4.0D;
-							if(materialMillimater == 0)
-								return;
+					var mat = this.drivingData[channel-1];
+					try
+					{ 
+						double materialMillimater = mat.LengthX / 4.0D;
+						if(materialMillimater == 0)
+							return;
 
-							// 素材長制限を超えた場合、素材長制限値とする
-							if (materialMillimater >= Settings.Default.MaxMaterialLength)
-							{
-								appLog.Debug($"素材長カウンタ値[{materialData[channel - 1].lengthX}]=>長さ[{materialMillimater}]mmが最大素材長[{Settings.Default.MaxMaterialLength}]mmを超えた為、最大素材長に変換します");
-								materialMillimater = Settings.Default.MaxMaterialLength;
-							}
-
-							double driveTimeMS = 0;
-							double conveyorSpeed = ConveyorSettings.GetSelectedConveyor().Speed;
-							driveTimeMS = 1000D / (conveyorSpeed / materialMillimater);
-							//driveTimeMS += Settings.Default.AirNozzleBeforeTime + Settings.Default.AirNozzleAfterTime;
-							driveTimeMS += NozzleSettings.Instance.DataList[channel - 1].BeforeInjectionTime +
-											NozzleSettings.Instance.DataList[channel - 1].AfterInjectionTime;
-
-							DateTime finishTime = DateTime.Now.AddMilliseconds(driveTimeMS);
-							if(NozzleExecuters[channel-1].FinishExecTime < finishTime)
-								NozzleExecuters[channel - 1].FinishExecTime = finishTime;
-						}
-						catch(Exception ex)
+						// 素材長制限を超えた場合、素材長制限値とする
+						if (materialMillimater >= Settings.Default.MaxMaterialLength)
 						{
-							this.appLog.Error(ex);
+							appLog.Debug($"素材長カウンタ値[{mat.LengthX}]=>長さ[{materialMillimater}]mmが最大素材長[{Settings.Default.MaxMaterialLength}]mmを超えた為、最大素材長に変換します");
+							materialMillimater = Settings.Default.MaxMaterialLength;
 						}
 
-                    }
+						double driveTimeMS = 0;
+						double conveyorSpeed = ConveyorSettings.GetSelectedConveyor().Speed;
+						driveTimeMS = 1000D / (conveyorSpeed / materialMillimater);
+						//driveTimeMS += Settings.Default.AirNozzleBeforeTime + Settings.Default.AirNozzleAfterTime;
+						driveTimeMS += NozzleSettings.Instance.DataList[channel - 1].BeforeInjectionTime +
+										NozzleSettings.Instance.DataList[channel - 1].AfterInjectionTime;
 
-					this.materialData[channel - 1] = null;
+						DateTime finishTime = DateTime.Now.AddMilliseconds(driveTimeMS);
+						if(NozzleExecuters[channel-1].FinishExecTime < finishTime)
+							NozzleExecuters[channel - 1].FinishExecTime = finishTime;
+					}
+					catch(Exception ex)
+					{
+						this.appLog.Error(ex);
+					}
+
+					this.drivingData[channel - 1] = null;
 				}
             }
         }

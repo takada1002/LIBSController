@@ -162,8 +162,8 @@ namespace LIBSController
 		// Ethernet
         private ClientCommunicator clientComm = null;
 		
-		// 素材管理キュー
-		private List<MaterialQueue> materialQueue = null;
+		// 運転管理キュー
+		private List<DrivingQueue> drivingQueue = null;
 		
 		// カウンタボード
 		private List<CounterBoard> counterBoard = null;
