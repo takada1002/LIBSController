@@ -56,9 +56,11 @@ namespace LIBSController
 			this.afterTimeNextTimer.Tick += AfterTimeNextTimer_Tick;
         }
 
-		// 表示の初期化
-		private void initializeControl()
+        // 表示の初期化
+        private void initializeControl()
         {
+			//numericUpDownBeforeTime.Value = Settings.Default.AirNozzleBeforeTime;
+			//numericUpDownAfterTime.Value = Settings.Default.AirNozzleAfterTime;
 			// ノズル番号表示
 			this.labelNozzleNumber.Text = "1";
 			UpdateData();
@@ -78,6 +80,20 @@ namespace LIBSController
 
 			this.comboBoxMaxMaterilaLength.DataSource = this.maxMaterialLengthList;
 			this.comboBoxMaxMaterilaLength.SelectedItem = Settings.Default.MaxMaterialLength;
+		}
+
+		// 前時間変更イベント
+		private void numericUpDownBeforeTime_Leave(object sender, EventArgs e)
+		{
+			//Settings.Default.AirNozzleBeforeTime = Convert.ToInt32(numericUpDownBeforeTime.Value);
+			GetNozzleSetting().BeforeInjectionTime = Convert.ToInt32(numericUpDownBeforeTime.Value);
+		}
+
+		// 後時間変更イベント
+		private void numericUpDownAfterTime_Leave(object sender, EventArgs e)
+		{
+			//Settings.Default.AirNozzleAfterTime = Convert.ToInt32(numericUpDownAfterTime.Value);
+			GetNozzleSetting().AfterInjectionTime = Convert.ToInt32(numericUpDownAfterTime.Value);
 		}
 
 		// 設定終了ボタンクリックイベント
@@ -121,8 +137,6 @@ namespace LIBSController
 		private void UpdateData()
 		{
 			var nozzleSetting = GetNozzleSetting();
-			textBoxBeforeTime.Text = nozzleSetting.BeforeInjectionTime.ToString();
-			textBoxAfterTime.Text = nozzleSetting.AfterInjectionTime.ToString();
 		}
 
 		// 現在ノズル番号のノズル設定を取得

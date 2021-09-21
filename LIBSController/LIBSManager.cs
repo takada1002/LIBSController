@@ -591,7 +591,7 @@ namespace LIBSController
                             Boolean live = ((status & 0x02) == 0x02);
                             // Ready ビットを取得
                             Boolean ready = ((status & 0x01) == 0x01);
-							
+
 							// force ready
 							//Boolean ready = true;
 

@@ -145,11 +145,6 @@ namespace LIBSController
 
             // コンボボックスとタイミング調整を変更不可に
             this.comboBoxConveyorSpeed.Enabled = false;
-			this.textBoxPaddleTiming.Enabled = false;
-			this.buttonTimingBack.Enabled = false;
-			this.buttonTimingLargeBack.Enabled = false;
-			this.buttonTimingNext.Enabled = false;
-			this.buttonTimingLargeNext.Enabled = false;
 			this.labelNozzleNumber.Enabled = false;
 			this.buttonNozzleBack.Enabled = false;
 			this.buttonNozzleNext.Enabled = false;
@@ -167,7 +162,6 @@ namespace LIBSController
 			this.comboBoxConveyorSpeed.SelectedItem = conveyorItem;
 
 			// タイミング表示
-			this.textBoxPaddleTiming.Text = ConveyorSettings.GetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text)).ToString();
 
 			// ノズル番号表示
 			this.labelNozzleNumber.Text = "1";
@@ -563,13 +557,9 @@ namespace LIBSController
             if (!this.isChangingT)
             {
                 // 現在の設定値を取得
+                //this.beforeTiming = (UInt32)this.numericUpDownPaddleTiming.Value;
 				this.beforeTiming = ConveyorSettings.GetNozzleTiming();
                 // 有効化
-				this.textBoxPaddleTiming.Enabled = true;
-				this.buttonTimingBack.Enabled = true;
-				this.buttonTimingLargeBack.Enabled = true;
-				this.buttonTimingNext.Enabled = true;
-				this.buttonTimingLargeNext.Enabled = true;
 				this.labelNozzleNumber.Enabled = true;
 				this.buttonNozzleBack.Enabled = true;
 				this.buttonNozzleNext.Enabled = true;
@@ -586,11 +576,6 @@ namespace LIBSController
                 this.changeTimerT.Stop();
 
                 // 無効化
-				this.textBoxPaddleTiming.Enabled = false;
-				this.buttonTimingBack.Enabled = false;
-				this.buttonTimingLargeBack.Enabled = false;
-				this.buttonTimingNext.Enabled = false;
-				this.buttonTimingLargeNext.Enabled = false;
 				this.labelNozzleNumber.Enabled = false;
 				this.buttonNozzleBack.Enabled = false;
 				this.buttonNozzleNext.Enabled = false;
@@ -619,11 +604,6 @@ namespace LIBSController
                 this.changeTimerT.Stop();
 
                 // 無効化
-				this.textBoxPaddleTiming.Enabled = false;
-				this.buttonTimingBack.Enabled = false;
-				this.buttonTimingLargeBack.Enabled = false;
-				this.buttonTimingNext.Enabled = false;
-				this.buttonTimingLargeNext.Enabled = false;
 				this.labelNozzleNumber.Enabled = false;
 				this.buttonNozzleBack.Enabled = false;
 				this.buttonNozzleNext.Enabled = false;
@@ -632,9 +612,9 @@ namespace LIBSController
                 // ボタンの色変更 (白)
                 this.buttonChangePaddleTiming.BackColor = Color.White;
                 // 設定値を元の値に戻す
+                //this.numericUpDownPaddleTiming.Value = Settings.Default.PaddleDriveTiming;
 				ConveyorSettings.SetNozzleTiming(beforeTiming);
 				ConveyorSettings.Serialize();
-				this.textBoxPaddleTiming.Text = ConveyorSettings.GetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text)).ToString();
 			}
         }
 
@@ -762,11 +742,9 @@ namespace LIBSController
 			}
 		}
 
-		// ノズル番号変化イベント
-		private void labelNozzleNumber_TextChanged(object sender, EventArgs e)
 		{
-			if (this.labelNozzleNumber.Enabled)
 			{
+				ConveyorSettings.SetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text), Convert.ToUInt32(this.numericUpDownPaddleTiming.Value));
 				this.changeTimerT.Stop();
 				this.changeTimerT.Start();
 			}
@@ -774,18 +752,14 @@ namespace LIBSController
 			this.textBoxPaddleTiming.Text = ConveyorSettings.GetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text)).ToString();
 		}
 
-		// パドルタイミング変化イベント
-		private void textBoxPaddleTiming_TextChanged(object sender, EventArgs e)
 		{
-			if(!int.TryParse(this.textBoxPaddleTiming.Text,out var num))
-				this.textBoxPaddleTiming.Text = ConveyorSettings.GetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text)).ToString();
-
-			if (this.textBoxPaddleTiming.Enabled)
 			{
 				ConveyorSettings.SetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text), Convert.ToUInt32(this.textBoxPaddleTiming.Text));
 				this.changeTimerT.Stop();
 				this.changeTimerT.Start();
 			}
+
+			this.numericUpDownPaddleTiming.Value = ConveyorSettings.GetNozzleTiming(Convert.ToInt32(labelNozzleNumber.Text));
 		}
 
 		// ノズル番号 前 クリックイベント
@@ -1200,5 +1174,7 @@ namespace LIBSController
 
 
 		#endregion
+
+
 	}
 }

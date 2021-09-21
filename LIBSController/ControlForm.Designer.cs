@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
 			this.comboBoxConveyorSpeed = new System.Windows.Forms.ComboBox();
+			this.numericUpDownPaddleTiming = new System.Windows.Forms.NumericUpDown();
 			this.buttonChangeConveyorSpeed = new System.Windows.Forms.Button();
 			this.buttonChangePaddleTiming = new System.Windows.Forms.Button();
 			this.buttonShutdown = new System.Windows.Forms.Button();
@@ -56,6 +57,7 @@
 			this.labelNozzleNumber = new System.Windows.Forms.Label();
 			this.buttonStopLIBSSorter = new System.Windows.Forms.Button();
 			this.buttonStartLIBSSorter = new System.Windows.Forms.Button();
+			this.statusLabel = new LIBSController.StatusLabel();
 			this.btnEncoderReset = new System.Windows.Forms.Button();
 			this.btnLIBSReset = new System.Windows.Forms.Button();
 			this.btnInverterReset = new System.Windows.Forms.Button();
@@ -77,11 +79,24 @@
 			this.comboBoxConveyorSpeed.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.comboBoxConveyorSpeed.Font = new System.Drawing.Font("MS UI Gothic", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.comboBoxConveyorSpeed.FormattingEnabled = true;
-			this.comboBoxConveyorSpeed.Location = new System.Drawing.Point(35, 113);
 			this.comboBoxConveyorSpeed.Name = "comboBoxConveyorSpeed";
 			this.comboBoxConveyorSpeed.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.comboBoxConveyorSpeed.Size = new System.Drawing.Size(601, 72);
 			this.comboBoxConveyorSpeed.TabIndex = 10;
+			// 
+			// numericUpDownPaddleTiming
+			// 
+			this.numericUpDownPaddleTiming.Font = new System.Drawing.Font("MS UI Gothic", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this.numericUpDownPaddleTiming.Location = new System.Drawing.Point(341, 263);
+			this.numericUpDownPaddleTiming.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+			this.numericUpDownPaddleTiming.Name = "numericUpDownPaddleTiming";
+			this.numericUpDownPaddleTiming.Size = new System.Drawing.Size(292, 71);
+			this.numericUpDownPaddleTiming.TabIndex = 14;
+			this.numericUpDownPaddleTiming.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownPaddleTiming.ValueChanged += new System.EventHandler(this.OnValueChangedPaddleTiming);
 			// 
 			// buttonChangeConveyorSpeed
 			// 
@@ -101,7 +116,6 @@
 			this.buttonChangePaddleTiming.BackColor = System.Drawing.Color.White;
 			this.buttonChangePaddleTiming.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonChangePaddleTiming.Font = new System.Drawing.Font("MS UI Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.buttonChangePaddleTiming.Location = new System.Drawing.Point(680, 221);
 			this.buttonChangePaddleTiming.Name = "buttonChangePaddleTiming";
 			this.buttonChangePaddleTiming.Size = new System.Drawing.Size(150, 72);
 			this.buttonChangePaddleTiming.TabIndex = 2;
@@ -341,7 +355,6 @@
 			// 
 			this.label1.AutoSize = true;
 			this.label1.Font = new System.Drawing.Font("MS UI Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.label1.Location = new System.Drawing.Point(86, 197);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(97, 19);
 			this.label1.TabIndex = 19;
@@ -351,7 +364,6 @@
 			// 
 			this.label2.AutoSize = true;
 			this.label2.Font = new System.Drawing.Font("MS UI Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.label2.Location = new System.Drawing.Point(404, 197);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(81, 19);
 			this.label2.TabIndex = 19;
@@ -362,9 +374,7 @@
 			this.buttonNozzleBack.BackColor = System.Drawing.Color.White;
 			this.buttonNozzleBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonNozzleBack.Font = new System.Drawing.Font("MS UI Gothic", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.buttonNozzleBack.Location = new System.Drawing.Point(35, 302);
 			this.buttonNozzleBack.Name = "buttonNozzleBack";
-			this.buttonNozzleBack.Size = new System.Drawing.Size(95, 72);
 			this.buttonNozzleBack.TabIndex = 11;
 			this.buttonNozzleBack.Text = "◀";
 			this.buttonNozzleBack.UseVisualStyleBackColor = false;
@@ -375,10 +385,8 @@
 			this.buttonNozzleNext.BackColor = System.Drawing.Color.White;
 			this.buttonNozzleNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonNozzleNext.Font = new System.Drawing.Font("MS UI Gothic", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.buttonNozzleNext.Location = new System.Drawing.Point(136, 302);
 			this.buttonNozzleNext.Name = "buttonNozzleNext";
 			this.buttonNozzleNext.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-			this.buttonNozzleNext.Size = new System.Drawing.Size(94, 72);
 			this.buttonNozzleNext.TabIndex = 13;
 			this.buttonNozzleNext.Text = "▶";
 			this.buttonNozzleNext.UseVisualStyleBackColor = false;
@@ -389,9 +397,7 @@
 			this.labelNozzleNumber.BackColor = System.Drawing.Color.White;
 			this.labelNozzleNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.labelNozzleNumber.Font = new System.Drawing.Font("MS UI Gothic", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.labelNozzleNumber.Location = new System.Drawing.Point(35, 221);
 			this.labelNozzleNumber.Name = "labelNozzleNumber";
-			this.labelNozzleNumber.Size = new System.Drawing.Size(195, 72);
 			this.labelNozzleNumber.TabIndex = 12;
 			this.labelNozzleNumber.Text = "1";
 			this.labelNozzleNumber.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -402,7 +408,6 @@
 			this.buttonStopLIBSSorter.BackColor = System.Drawing.Color.White;
 			this.buttonStopLIBSSorter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonStopLIBSSorter.Font = new System.Drawing.Font("MS UI Gothic", 16F);
-			this.buttonStopLIBSSorter.Location = new System.Drawing.Point(847, 221);
 			this.buttonStopLIBSSorter.Name = "buttonStopLIBSSorter";
 			this.buttonStopLIBSSorter.Size = new System.Drawing.Size(150, 72);
 			this.buttonStopLIBSSorter.TabIndex = 6;
@@ -424,6 +429,17 @@
 			this.buttonStartLIBSSorter.UseVisualStyleBackColor = false;
 			this.buttonStartLIBSSorter.Visible = false;
 			this.buttonStartLIBSSorter.Click += new System.EventHandler(this.OnClickButtonStartLIBSSorter);
+			// 
+			// statusLabel
+			// 
+			this.statusLabel.BackColor = System.Drawing.Color.Yellow;
+			this.statusLabel.LabelText = "";
+			this.statusLabel.Location = new System.Drawing.Point(0, 728);
+			this.statusLabel.Margin = new System.Windows.Forms.Padding(0);
+			this.statusLabel.Name = "statusLabel";
+			this.statusLabel.Size = new System.Drawing.Size(1024, 40);
+			this.statusLabel.Status = LIBSController.LIBSSorter.SorterStatus.NOT_READY;
+			this.statusLabel.TabIndex = 0;
 			// 
 			// btnEncoderReset
 			// 
@@ -607,6 +623,7 @@
 			this.Controls.Add(this.buttonNozzleBack);
 			this.Controls.Add(this.buttonChangePaddleTiming);
 			this.Controls.Add(this.buttonChangeConveyorSpeed);
+			this.Controls.Add(this.numericUpDownPaddleTiming);
 			this.Controls.Add(this.comboBoxConveyorSpeed);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "ControlForm";
@@ -614,6 +631,7 @@
 			this.Text = "MainForm";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
 			this.Load += new System.EventHandler(this.ControlForm_Load);
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownPaddleTiming)).EndInit();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -624,6 +642,7 @@
         #endregion
 
         private System.Windows.Forms.ComboBox comboBoxConveyorSpeed;
+        private System.Windows.Forms.NumericUpDown numericUpDownPaddleTiming;
         private System.Windows.Forms.Button buttonChangeConveyorSpeed;
         private System.Windows.Forms.Button buttonChangePaddleTiming;
         private System.Windows.Forms.Button buttonShutdown;
