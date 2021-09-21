@@ -1257,6 +1257,9 @@ namespace LIBSController
 				{
 					libsRunReadyWaitFlag = true;
 
+					// force ready
+					//libsRunReadyWaitFlag = false;
+
 					// LIBS 装置にカウンタリセットコマンドを送信
 					this.libsMgr.resetCounter();
 

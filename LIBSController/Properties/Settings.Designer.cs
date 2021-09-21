@@ -187,7 +187,7 @@ namespace LIBSController.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool LibsDebug {
             get {
                 return ((bool)(this["LibsDebug"]));

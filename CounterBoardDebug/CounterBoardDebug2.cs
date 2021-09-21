@@ -804,7 +804,8 @@ namespace CounterBoardDebug
 
 
                 // 正転で運転指令
-                this.inverterProtocol.setRunning(InverterProtocol.RunningCommand.STR, false);
+                //this.inverterProtocol.setRunning(InverterProtocol.RunningCommand.STR, false);
+                this.inverterProtocol.setRunning(InverterProtocol.RunningCommand.STF, false);
                 //this.checkTimer.Start();
                 this.checkMinuteTimer.Start();
             }

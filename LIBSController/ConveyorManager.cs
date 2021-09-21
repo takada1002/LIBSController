@@ -211,7 +211,8 @@ namespace LIBSController
 			try
             {
                 // 正転で運転指令
-                this.inverterProtocol.setRunning(InverterProtocol.RunningCommand.STR, false);
+                //this.inverterProtocol.setRunning(InverterProtocol.RunningCommand.STR, false);
+                this.inverterProtocol.setRunning(InverterProtocol.RunningCommand.STF, false);
             }
             catch(Exception ex)
             {
